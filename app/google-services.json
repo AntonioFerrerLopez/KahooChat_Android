@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "213820352091",
+    "firebase_url": "https://kahoochat.firebaseio.com",
+    "project_id": "kahoochat",
+    "storage_bucket": "kahoochat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213820352091:android:adbb91cf4975e3b7e3417e",
+        "android_client_info": {
+          "package_name": "com.afl.kahootchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213820352091-ss26qoprn4g6tjghc8eaoa1ptk2lnqdi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC8kABosn442UNfQMj4ep49Rdxsg5zA2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213820352091-ss26qoprn4g6tjghc8eaoa1ptk2lnqdi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
