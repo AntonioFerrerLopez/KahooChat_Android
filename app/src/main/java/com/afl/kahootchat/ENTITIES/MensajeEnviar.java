@@ -1,4 +1,4 @@
-package com.afl.kahootchat;
+package com.afl.kahootchat.ENTITIES;
 
 import java.util.Map;
 

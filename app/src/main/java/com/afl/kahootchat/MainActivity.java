@@ -1,25 +1,21 @@
 package com.afl.kahootchat;
 
-import androidx.annotation.IntegerRes;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.afl.kahootchat.ENTITIES.Mensaje;
+import com.afl.kahootchat.ENTITIES.MensajeEnviar;
+import com.afl.kahootchat.ENTITIES.MensajeRecibir;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -49,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText txtMensaje ;
     private Button btnEnviar;
     private ImageButton btnEnviarFoto;
-    private AdapterMensajes adapter;
+    private HELPERS.AdapterMensajes adapter;
     private FirebaseDatabase database ;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage;
@@ -76,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
 
 
-        adapter = new AdapterMensajes(this);
+        adapter = new HELPERS.AdapterMensajes(this);
         LinearLayoutManager linearMensaje = new LinearLayoutManager(this);
         rvMensajes.setLayoutManager(linearMensaje);
         rvMensajes.setAdapter(adapter);
