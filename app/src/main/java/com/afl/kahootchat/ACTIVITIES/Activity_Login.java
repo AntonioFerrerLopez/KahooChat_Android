@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Activity_Login extends AppCompatActivity {
 
@@ -40,28 +41,51 @@ public class Activity_Login extends AppCompatActivity {
 
     mAuth = FirebaseAuth.getInstance();
 
+        btnGotoRegistro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Activity_Login.this , Activity_Registro.class));
+            }
+        });
+
     btnLogin.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mAuth.signInWithEmailAndPassword(emailLogin.getText().toString(), passwordLogin.getText().toString())
-                .addOnCompleteListener(Activity_Login.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(Activity_Login.this, "LOGIN CORRECTO.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(Activity_Login.this , MainActivity.class));
-                        }else{
-                            Toast.makeText(Activity_Login.this, "EMAIL O CONTRASEÑA INCORRECTOS", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
+            if(emailLogin.getText().toString().length() >= 3  && passwordLogin.getText().toString().length() >= 8 ){
+                mAuth.signInWithEmailAndPassword(emailLogin.getText().toString(), passwordLogin.getText().toString())
+                        .addOnCompleteListener(Activity_Login.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(Activity_Login.this, "LOGIN CORRECTO.", Toast.LENGTH_SHORT).show();
+                                    gotoMainActivity();
+                                }else{
+                                    Toast.makeText(Activity_Login.this, "EMAIL O CONTRASEÑA INCORRECTOS", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }else{
+                Toast.makeText(Activity_Login.this, "FALTAN DATOS ", Toast.LENGTH_SHORT).show();
+            }
 
         }
     });
 
 
 
+    }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if( currentUser != null){
+            Toast.makeText(Activity_Login.this, "USUARIO LOGEADO", Toast.LENGTH_SHORT).show();
+            gotoMainActivity();
+        }
+    }
+
+    private void  gotoMainActivity(){
+        startActivity(new Intent(Activity_Login.this , MainActivity.class));
     }
 }

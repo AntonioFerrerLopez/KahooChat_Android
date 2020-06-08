@@ -1,5 +1,6 @@
 package com.afl.kahootchat.ACTIVITIES;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -31,6 +32,7 @@ public class Activity_Registro extends AppCompatActivity {
     private EditText passwordRegistro ;
     private EditText passwordRepetirRegistro ;
     private Button btnRegistro;
+    private Button btnRegistroToLogin;
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase database ;
@@ -46,38 +48,41 @@ public class Activity_Registro extends AppCompatActivity {
         passwordRegistro = (EditText) findViewById(R.id.idRegistroPassword);
         passwordRepetirRegistro = (EditText) findViewById(R.id.idRegistroPasswordRepetir);
         btnRegistro = (Button) findViewById(R.id.btnRegistrar);
+        btnRegistroToLogin = (Button) findViewById(R.id.btnRegisterToLogin);
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         referenceUsuarios = database.getReference("Usuarios");
 
-
         btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isValidEmail(emailRegistro.getText().toString()) && isSamePassword()  && nameExists() ){
-                    mAuth.createUserWithEmailAndPassword(emailRegistro.getText().toString(), passwordRegistro.getText().toString())
-                            .addOnCompleteListener(Activity_Registro.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
+            if (isValidEmail(emailRegistro.getText().toString()) && isSamePassword()  && nameExists() ){
+                mAuth.createUserWithEmailAndPassword(emailRegistro.getText().toString(), passwordRegistro.getText().toString())
+                    .addOnCompleteListener(Activity_Registro.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(Activity_Registro.this, "USUARIO " + usuarioRegistro.getText().toString() + " registrado correctamente", Toast.LENGTH_SHORT).show();
+                            referenceUsuarios.push().setValue(new Usuario(usuarioRegistro.getText().toString(),emailRegistro.getText().toString()));
+                            clearForm();
+                            finish();
+                        } else {
+                            Toast.makeText(Activity_Registro.this, "FALLO AL REGISTRAR EL USUARIO", Toast.LENGTH_SHORT).show();
+                        }
+                        }
+                    });
 
-                                        Toast.makeText(Activity_Registro.this, "USUARIO " + usuarioRegistro.getText().toString() + " registrado correctamente", Toast.LENGTH_SHORT).show();
-                                        referenceUsuarios.push().setValue(new Usuario(usuarioRegistro.getText().toString(),emailRegistro.getText().toString()));
-                                        clearForm();
-                                    } else {
-                                        Toast.makeText(Activity_Registro.this, "FALLO AL REGISTRAR EL USUARIO", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-                            });
-
-                }
+            }
             }
         });
 
-
-
+        btnRegistroToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Activity_Registro.this , Activity_Login.class));
+            }
+        });
     }
 
     private void clearForm() {

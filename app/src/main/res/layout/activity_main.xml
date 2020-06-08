@@ -24,6 +24,18 @@
             android:layout_height="wrap_content"
             android:text="Kahoot"
             android:layout_gravity="center"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btnlogOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="LogOUT"
+                android:layout_gravity="end|center"/>
+        </LinearLayout>
+
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMensajes"

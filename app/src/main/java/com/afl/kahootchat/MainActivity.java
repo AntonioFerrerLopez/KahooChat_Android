@@ -13,11 +13,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.afl.kahootchat.ACTIVITIES.Activity_Login;
 import com.afl.kahootchat.ENTITIES.Mensaje;
 import com.afl.kahootchat.ENTITIES.MensajeEnviar;
 import com.afl.kahootchat.ENTITIES.MensajeRecibir;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,14 +46,15 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvMensajes;
     private EditText txtMensaje ;
     private Button btnEnviar;
+    private Button btnLogOut;
     private ImageButton btnEnviarFoto;
+
     private HELPERS.AdapterMensajes adapter;
     private FirebaseDatabase database ;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private String fotoPerfilUri = "";
-
 
 
 
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         txtMensaje = (EditText) findViewById(R.id.txtMensaje);
         btnEnviar = (Button) findViewById(R.id.btnEnviar);
         btnEnviarFoto = (ImageButton) findViewById(R.id.btnEnviarFoto);
+        btnLogOut = (Button) findViewById(R.id.btnlogOut);
 
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("SalaKahooChat");
@@ -97,6 +101,14 @@ public class MainActivity extends AppCompatActivity {
                 intent.setType("image/jpeg");
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 startActivityForResult(Intent.createChooser(intent, "Selecciona una foto" ), SEND_IMAGE_OK);
+            }
+        });
+
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+               finish();
             }
         });
 
