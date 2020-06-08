@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +37,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity {
 
     private final Integer SEND_IMAGE_OK = 1 ;
+    private final Integer SEND_FOTO_PERFIL_OK = 2 ;
+
+    private final String TYPE_MENSAJE = "1";
+    private final String TYPE_IMG = "2";
+
 
     private CircleImageView fotoPerfil;
     private TextView nombre;
@@ -43,13 +49,13 @@ public class MainActivity extends AppCompatActivity {
     private EditText txtMensaje ;
     private Button btnEnviar;
     private ImageButton btnEnviarFoto;
-
     private AdapterMensajes adapter;
-
     private FirebaseDatabase database ;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private String fotoPerfilUri = "";
+
 
 
 
@@ -80,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Mensaje msj = new MensajeEnviar(txtMensaje.getText().toString() ,
                                         nombre.getText().toString(),
-                               "" ,
-                           "1" ,
+                               fotoPerfilUri ,
+                                 TYPE_MENSAJE ,
                                  ServerValue.TIMESTAMP);
            databaseReference.push().setValue(msj);
            txtMensaje.setText("");
@@ -95,6 +101,16 @@ public class MainActivity extends AppCompatActivity {
                 intent.setType("image/jpeg");
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 startActivityForResult(Intent.createChooser(intent, "Selecciona una foto" ), SEND_IMAGE_OK);
+            }
+        });
+
+        fotoPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(Intent.createChooser(intent, "Selecciona una foto" ), SEND_FOTO_PERFIL_OK);
             }
         });
 
@@ -158,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
                             MensajeEnviar msj = new MensajeEnviar("Imagen Enviada" ,
                                     u.toString(),
                                     nombre.getText().toString(),
-                                    "",
-                                    "2",
+                                    fotoPerfilUri,
+                                    TYPE_IMG,
                                     ServerValue.TIMESTAMP);
                             databaseReference.push().setValue(msj);
                         }
@@ -167,6 +183,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+        }else if(requestCode  == SEND_FOTO_PERFIL_OK && resultCode == RESULT_OK){
+            Uri uri = data.getData();
+            storageReference  = storage.getReference("FotosPerfiles");
+            final StorageReference fotoReferencia = storageReference.child(uri.getLastPathSegment());
+
+            fotoReferencia.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    fotoReferencia.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Uri u = uri ;
+                            fotoPerfilUri = u.toString();
+                            MensajeEnviar msj = new MensajeEnviar("Foto de perfil Actualizada" ,
+                                    u.toString(),
+                                    nombre.getText().toString(),
+                                    fotoPerfilUri,
+                                    TYPE_IMG,
+                                    ServerValue.TIMESTAMP);
+                            databaseReference.push().setValue(msj);
+                            Glide.with(MainActivity.this).load(u.toString()).into(fotoPerfil);
+                        }
+                    });
+                }
+            });
         }
 
     }
