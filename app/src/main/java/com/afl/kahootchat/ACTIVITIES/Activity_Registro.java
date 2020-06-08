@@ -25,7 +25,10 @@ public class Activity_Registro extends AppCompatActivity {
         emailRegistro = (EditText) findViewById(R.id.idRegistroEmail);
         passwordRegistro = (EditText) findViewById(R.id.idRegistroPassword);
         passwordRepetirRegistro = (EditText) findViewById(R.id.idRegistroPasswordRepetir);
+       btnRegistro = (Button) findViewById(R.id.btnRegistrar);
 
 
     }
+
+
 }
