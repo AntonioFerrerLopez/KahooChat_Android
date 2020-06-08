@@ -21,13 +21,13 @@
         android:id="@+id/idRegistroPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Contraseña"
+        android:hint="Contraseña (entre 8 y 16 carácteres)"
         android:inputType="textPassword"/>
     <EditText
         android:id="@+id/idRegistroPasswordRepetir"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Contraseña"
+        android:hint="Repite la contraseña"
         android:inputType="textPassword"/>
     <Button
         android:id="@+id/btnRegistrar"
