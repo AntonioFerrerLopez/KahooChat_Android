@@ -20,6 +20,7 @@ import com.afl.kahootchat.ENTITIES.Mensaje;
 import com.afl.kahootchat.ENTITIES.MensajeEnviar;
 import com.afl.kahootchat.ENTITIES.MensajeRecibir;
 import com.afl.kahootchat.ENTITIES.Usuario;
+import com.afl.kahootchat.HELPERS.AdapterMensaje;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogOut;
     private ImageButton btnEnviarFoto;
 
-    private HELPERS.AdapterMensajes adapter;
+    private AdapterMensaje adapter;
     private FirebaseDatabase database ;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-        adapter = new HELPERS.AdapterMensajes(this);
+        adapter = new AdapterMensaje(this);
         LinearLayoutManager linearMensaje = new LinearLayoutManager(this);
         rvMensajes.setLayoutManager(linearMensaje);
         rvMensajes.setAdapter(adapter);
@@ -242,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
                             Uri u = uri ;
                             fotoPerfilUri = u.toString();
-                            MensajeEnviar msj = new MensajeEnviar(nombreUsuarioLogeado + " Ha actualizado su foto de perfil" ,
+                            MensajeEnviar msj = new MensajeEnviar(nombreUsuarioLogeado + " Ha actualizado su foto de perfil." ,
                                     u.toString(),
                                     nombreUsuarioLogeado,
                                     fotoPerfilUri,
