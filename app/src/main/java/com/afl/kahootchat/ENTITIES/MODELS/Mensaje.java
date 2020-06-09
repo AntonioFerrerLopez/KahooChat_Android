@@ -1,31 +1,20 @@
 package com.afl.kahootchat.ENTITIES.MODELS;
 
+import com.google.firebase.database.ServerValue;
+
 public class Mensaje {
 
     private String mensaje ;
     private String fotoUri;
-    private String nombre;
-    private String fotoPerfil ;
-    private String type_mensaje;
+    private boolean containsPhoto;
+    private String senderKey;
+    private Object createdTimestamp;
+
 
     public Mensaje() {
+        createdTimestamp = ServerValue.TIMESTAMP;
     }
 
-    public Mensaje(String mensaje, String nombre, String fotoPerfil, String type_mensaje) {
-        this.mensaje = mensaje;
-        this.nombre = nombre;
-        this.fotoPerfil = fotoPerfil;
-        this.type_mensaje = type_mensaje;
-    }
-
-    public Mensaje(String mensaje, String fotoUri, String nombre, String fotoPerfil, String type_mensaje) {
-        this.mensaje = mensaje;
-        this.fotoUri = fotoUri;
-        this.nombre = nombre;
-        this.fotoPerfil = fotoPerfil;
-        this.type_mensaje = type_mensaje;
-
-    }
 
     public String getFotoUri() {
         return fotoUri;
@@ -43,37 +32,23 @@ public class Mensaje {
         this.mensaje = mensaje;
     }
 
-    public String getNombre() {
-        return nombre;
+    public boolean isContainsPhoto() {
+        return containsPhoto;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setContainsPhoto(boolean containsPhoto) {
+        this.containsPhoto = containsPhoto;
     }
 
-    public String getFotoPerfil() {
-        return fotoPerfil;
+    public String getSenderKey() {
+        return senderKey;
     }
 
-    public void setFotoPerfil(String fotoPerfil) {
-        this.fotoPerfil = fotoPerfil;
+    public void setSenderKey(String senderKey) {
+        this.senderKey = senderKey;
     }
 
-    public String getType_mensaje() {
-        return type_mensaje;
-    }
-
-    public void setType_mensaje(String type_mensaje) {
-        this.type_mensaje = type_mensaje;
-    }
-
-    @Override
-    public String toString() {
-        return "Mensaje{" +
-                "mensaje='" + mensaje + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", fotoPerfil='" + fotoPerfil + '\'' +
-                ", type_mensaje='" + type_mensaje + '\'' +
-                '}';
+    public Object getCreatedTimestamp() {
+        return createdTimestamp;
     }
 }

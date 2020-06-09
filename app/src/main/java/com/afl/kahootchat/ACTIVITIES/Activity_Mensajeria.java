@@ -14,9 +14,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afl.kahootchat.ENTITIES.DAO.UsuarioDAO;
+import com.afl.kahootchat.ENTITIES.DATAMANIPULATIONOBJECTS.MensajeDMO;
 import com.afl.kahootchat.ENTITIES.MODELS.Mensaje;
-import com.afl.kahootchat.ENTITIES.MODELS.MensajeEnviar;
-import com.afl.kahootchat.ENTITIES.MODELS.MensajeRecibir;
 import com.afl.kahootchat.ENTITIES.MODELS.Usuario;
 import com.afl.kahootchat.ADAPTERS.Mensajeria_Adapter;
 import com.afl.kahootchat.R;
@@ -89,13 +89,17 @@ public class Activity_Mensajeria extends AppCompatActivity {
         btnEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Mensaje msj = new MensajeEnviar(txtMensaje.getText().toString() ,
-                               nombreUsuarioLogeado,
-                               fotoPerfilUri ,
-                                 TYPE_MENSAJE ,
-                                 ServerValue.TIMESTAMP);
-           databaseReference.push().setValue(msj);
-           txtMensaje.setText("");
+            if(!txtMensaje.getText().toString().isEmpty()){
+                Mensaje msj = new Mensaje();
+                msj.setMensaje(txtMensaje.getText().toString());
+                msj.setContainsPhoto(false);
+                msj.setSenderKey(UsuarioDAO.getUserKey());
+                databaseReference.push().setValue(msj);
+                txtMensaje.setText("");
+            }
+
+
+
 
             }
         });
@@ -138,8 +142,9 @@ public class Activity_Mensajeria extends AppCompatActivity {
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                MensajeRecibir m = dataSnapshot.getValue(MensajeRecibir.class);
-                adapter.addMensaje(m);
+                Mensaje msjToLoad = dataSnapshot.getValue(Mensaje.class);
+                MensajeDMO mensajeDMO = new  MensajeDMO(dataSnapshot.getKey(),msjToLoad);
+                adapter.addMensaje(mensajeDMO);
             }
 
             @Override
@@ -210,20 +215,18 @@ public class Activity_Mensajeria extends AppCompatActivity {
                     fotoReferencia.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            Uri u = uri ;
-                            MensajeEnviar msj = new MensajeEnviar(nombreUsuarioLogeado + " ha enviado una imagen" ,
-                                    u.toString(),
-                                    nombreUsuarioLogeado,
-                                    fotoPerfilUri,
-                                    TYPE_IMG,
-                                    ServerValue.TIMESTAMP);
-                            databaseReference.push().setValue(msj);
+                            Mensaje mesajeToSend = new Mensaje();
+                            mesajeToSend.setMensaje(" te ha enviado una foto");
+                            mesajeToSend.setFotoUri(uri.toString());
+                            mesajeToSend.setContainsPhoto(true);
+                            mesajeToSend.setSenderKey(UsuarioDAO.getUserKey());
+                            databaseReference.push().setValue(mesajeToSend);
                         }
                     });
                 }
             });
 
-        }else if(requestCode  == SEND_FOTO_PERFIL_OK && resultCode == RESULT_OK){
+        }/*else if(requestCode  == SEND_FOTO_PERFIL_OK && resultCode == RESULT_OK){
             Uri uri = data.getData();
             storageReference  = storage.getReference("FotosPerfiles");
             final StorageReference fotoReferencia = storageReference.child(uri.getLastPathSegment());
@@ -248,7 +251,7 @@ public class Activity_Mensajeria extends AppCompatActivity {
                     });
                 }
             });
-        }
+        }*/
 
     }
 
