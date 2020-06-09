@@ -1,11 +1,16 @@
 package com.afl.kahootchat.ENTITIES;
 
+import com.google.firebase.database.ServerValue;
+
 public class Usuario {
 
+    private String fotoPerfilUri;
     private String nombre;
     private String email;
+    private Object createTimestamp;
 
     public Usuario() {
+        createTimestamp = ServerValue.TIMESTAMP;
     }
 
     public Usuario(String nombre, String email) {
@@ -29,11 +34,19 @@ public class Usuario {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "nombre='" + nombre + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    public String getFotoPerfilUri() {
+        return fotoPerfilUri;
+    }
+
+    public void setFotoPerfilUri(String fotoPerfilUri) {
+        this.fotoPerfilUri = fotoPerfilUri;
+    }
+
+    public Object getCreateTimestamp() {
+        return createTimestamp;
+    }
+
+    public Long getCreateTimestampReturnLong(){
+        return (Long) createTimestamp;
     }
 }
