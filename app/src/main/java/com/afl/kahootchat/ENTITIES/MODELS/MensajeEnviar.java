@@ -1,4 +1,4 @@
-package com.afl.kahootchat.ENTITIES;
+package com.afl.kahootchat.ENTITIES.MODELS;
 
 import java.util.Map;
 

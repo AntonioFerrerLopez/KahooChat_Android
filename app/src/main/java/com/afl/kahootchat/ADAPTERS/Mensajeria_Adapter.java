@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afl.kahootchat.ENTITIES.MensajeRecibir;
+import com.afl.kahootchat.ENTITIES.MODELS.MensajeRecibir;
 import com.afl.kahootchat.HOLDERS.Mensajeria_Holder;
 import com.afl.kahootchat.R;
 import com.bumptech.glide.Glide;

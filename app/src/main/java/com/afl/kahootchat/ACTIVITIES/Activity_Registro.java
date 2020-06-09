@@ -2,7 +2,6 @@ package com.afl.kahootchat.ACTIVITIES;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
@@ -14,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.afl.kahootchat.ENTITIES.Usuario;
+import com.afl.kahootchat.ENTITIES.MODELS.Usuario;
 import com.afl.kahootchat.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

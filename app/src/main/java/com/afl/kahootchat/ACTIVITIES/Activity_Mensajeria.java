@@ -14,10 +14,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afl.kahootchat.ENTITIES.Mensaje;
-import com.afl.kahootchat.ENTITIES.MensajeEnviar;
-import com.afl.kahootchat.ENTITIES.MensajeRecibir;
-import com.afl.kahootchat.ENTITIES.Usuario;
+import com.afl.kahootchat.ENTITIES.MODELS.Mensaje;
+import com.afl.kahootchat.ENTITIES.MODELS.MensajeEnviar;
+import com.afl.kahootchat.ENTITIES.MODELS.MensajeRecibir;
+import com.afl.kahootchat.ENTITIES.MODELS.Usuario;
 import com.afl.kahootchat.ADAPTERS.Mensajeria_Adapter;
 import com.afl.kahootchat.R;
 import com.bumptech.glide.Glide;

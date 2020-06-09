@@ -1,4 +1,4 @@
-package com.afl.kahootchat.ENTITIES;
+package com.afl.kahootchat.ENTITIES.MODELS;
 
 public class MensajeRecibir  extends Mensaje{
  private Long hora;

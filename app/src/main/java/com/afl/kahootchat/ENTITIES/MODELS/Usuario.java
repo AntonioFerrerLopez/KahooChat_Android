@@ -1,4 +1,4 @@
-package com.afl.kahootchat.ENTITIES;
+package com.afl.kahootchat.ENTITIES.MODELS;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
@@ -47,8 +47,5 @@ public class Usuario {
         return createTimestamp;
     }
 
-    @Exclude
-    public Long getCreateTimestampReturnLong(){
-        return (Long) createTimestamp;
-    }
+
 }
