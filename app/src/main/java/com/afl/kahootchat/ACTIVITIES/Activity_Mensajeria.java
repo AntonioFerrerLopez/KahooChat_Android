@@ -45,7 +45,6 @@ public class Activity_Mensajeria extends AppCompatActivity {
     private final String TYPE_MENSAJE = "1";
     private final String TYPE_IMG = "2";
 
-
     private CircleImageView fotoPerfil;
     private TextView nombre;
     private RecyclerView rvMensajes;
@@ -64,8 +63,6 @@ public class Activity_Mensajeria extends AppCompatActivity {
 
     private String fotoPerfilUri = "";
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,13 +76,10 @@ public class Activity_Mensajeria extends AppCompatActivity {
         btnEnviarFoto = (ImageButton) findViewById(R.id.btnEnviarFoto);
         btnLogOut = (Button) findViewById(R.id.btnlogOut);
 
-
-
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("SalaKahooChat");
         storage = FirebaseStorage.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
 
         adapter = new Mensajeria_Adapter(this);
         LinearLayoutManager linearMensaje = new LinearLayoutManager(this);
