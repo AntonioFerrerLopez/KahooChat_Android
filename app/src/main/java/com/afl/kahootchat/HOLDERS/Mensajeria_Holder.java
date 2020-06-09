@@ -1,4 +1,4 @@
-package com.afl.kahootchat.HELPERS;
+package com.afl.kahootchat.HOLDERS;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -9,7 +9,7 @@ import com.afl.kahootchat.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-    public class HolderMensaje extends RecyclerView.ViewHolder {
+    public class Mensajeria_Holder extends RecyclerView.ViewHolder {
 
         private TextView nombre ;
         private TextView mensaje;
@@ -17,7 +17,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
         private CircleImageView fotoMensajePerfil;
         private ImageView fotoMensaje;
 
-        public HolderMensaje(View itemView) {
+        public Mensajeria_Holder(View itemView) {
             super(itemView);
 
             nombre = (TextView) itemView.findViewById(R.id.nombreMensaje);

@@ -1,6 +1,5 @@
-package com.afl.kahootchat;
+package com.afl.kahootchat.ACTIVITIES;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,12 +14,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afl.kahootchat.ACTIVITIES.Activity_Login;
 import com.afl.kahootchat.ENTITIES.Mensaje;
 import com.afl.kahootchat.ENTITIES.MensajeEnviar;
 import com.afl.kahootchat.ENTITIES.MensajeRecibir;
 import com.afl.kahootchat.ENTITIES.Usuario;
-import com.afl.kahootchat.HELPERS.AdapterMensaje;
+import com.afl.kahootchat.ADAPTERS.Mensajeria_Adapter;
+import com.afl.kahootchat.R;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +37,7 @@ import com.google.firebase.storage.UploadTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity {
+public class Activity_Mensajeria extends AppCompatActivity {
 
     private final Integer SEND_IMAGE_OK = 1 ;
     private final Integer SEND_FOTO_PERFIL_OK = 2 ;
@@ -55,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogOut;
     private ImageButton btnEnviarFoto;
 
-    private AdapterMensaje adapter;
+    private Mensajeria_Adapter adapter;
     private FirebaseDatabase database ;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage;
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_mensajeria);
 
         fotoPerfil = (CircleImageView) findViewById(R.id.fotoPerfil);
         nombre = (TextView) findViewById(R.id.nombre);
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-        adapter = new AdapterMensaje(this);
+        adapter = new Mensajeria_Adapter(this);
         LinearLayoutManager linearMensaje = new LinearLayoutManager(this);
         rvMensajes.setLayoutManager(linearMensaje);
         rvMensajes.setAdapter(adapter);
@@ -190,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                         nombreUsuarioLogeado = usuario.getValue(Usuario.class).getNombre();
                         nombre.setText(nombreUsuarioLogeado);
                         btnEnviar.setEnabled(true);
-                        Toast.makeText(MainActivity.this , "USUARIO :  " + usuario.getValue(Usuario.class).getNombre(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Activity_Mensajeria.this , "USUARIO :  " + usuario.getValue(Usuario.class).getNombre(), Toast.LENGTH_SHORT).show();
                     }
                 }
                 @Override
@@ -250,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                                     TYPE_IMG,
                                     ServerValue.TIMESTAMP);
                             databaseReference.push().setValue(msj);
-                            Glide.with(MainActivity.this).load(u.toString()).into(fotoPerfil);
+                            Glide.with(Activity_Mensajeria.this).load(u.toString()).into(fotoPerfil);
                         }
                     });
                 }
@@ -260,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void gotoLoginActivityAndFinish(){
-        startActivity(new Intent(MainActivity.this, Activity_Login.class));
+        startActivity(new Intent(Activity_Mensajeria.this, Activity_Login.class));
         finish();
     }
 }

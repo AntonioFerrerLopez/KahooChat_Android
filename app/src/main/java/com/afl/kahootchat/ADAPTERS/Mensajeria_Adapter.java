@@ -1,4 +1,4 @@
-package com.afl.kahootchat.HELPERS;
+package com.afl.kahootchat.ADAPTERS;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afl.kahootchat.ENTITIES.MensajeRecibir;
+import com.afl.kahootchat.HOLDERS.Mensajeria_Holder;
 import com.afl.kahootchat.R;
 import com.bumptech.glide.Glide;
 
@@ -16,14 +17,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class AdapterMensaje extends RecyclerView.Adapter<HolderMensaje> {
+public class Mensajeria_Adapter extends RecyclerView.Adapter<Mensajeria_Holder> {
 
     private static final String TYPE_IMAGE = "2";
     private static final String TYPE_MENSAJE = "1";
     private List<MensajeRecibir> listMensaje = new ArrayList<>();
     private Context c;
 
-    public AdapterMensaje(Context c) {
+    public Mensajeria_Adapter(Context c) {
         this.c = c;
     }
 
@@ -34,13 +35,13 @@ public class AdapterMensaje extends RecyclerView.Adapter<HolderMensaje> {
     }
 
     @Override
-    public HolderMensaje onCreateViewHolder(ViewGroup parent, int viewType) {
+    public Mensajeria_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(c).inflate(R.layout.card_view_mensajes, parent, false);
-        return new HolderMensaje(v);
+        return new Mensajeria_Holder(v);
     }
 
     @Override
-    public void onBindViewHolder(HolderMensaje holder, int position) {
+    public void onBindViewHolder(Mensajeria_Holder holder, int position) {
         holder.getNombre().setText(listMensaje.get(position).getNombre());
         holder.getMensaje().setText(listMensaje.get(position).getMensaje());
         if (listMensaje.get(position).getType_mensaje().equals(TYPE_IMAGE)) {
