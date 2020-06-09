@@ -76,10 +76,10 @@ public class Activity_Login extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
+    protected void onResume() {
+        super.onResume();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if( currentUser != null){
+        if (currentUser != null) {
             Toast.makeText(Activity_Login.this, "USUARIO LOGEADO", Toast.LENGTH_SHORT).show();
             gotoMainActivity();
         }

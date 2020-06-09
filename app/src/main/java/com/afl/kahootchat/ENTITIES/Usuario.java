@@ -5,6 +5,8 @@ public class Usuario {
     private String nombre;
     private String email;
 
+    public Usuario() {
+    }
 
     public Usuario(String nombre, String email) {
         this.nombre = nombre;
@@ -25,5 +27,13 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

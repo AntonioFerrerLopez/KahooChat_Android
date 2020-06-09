@@ -1,5 +1,6 @@
 package com.afl.kahootchat;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,20 +13,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afl.kahootchat.ACTIVITIES.Activity_Login;
 import com.afl.kahootchat.ENTITIES.Mensaje;
 import com.afl.kahootchat.ENTITIES.MensajeEnviar;
 import com.afl.kahootchat.ENTITIES.MensajeRecibir;
+import com.afl.kahootchat.ENTITIES.Usuario;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -54,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private FirebaseAuth mAuth ;
+    private String nombreUsuarioLogeado;
+
     private String fotoPerfilUri = "";
 
 
@@ -71,9 +79,12 @@ public class MainActivity extends AppCompatActivity {
         btnEnviarFoto = (ImageButton) findViewById(R.id.btnEnviarFoto);
         btnLogOut = (Button) findViewById(R.id.btnlogOut);
 
+
+
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("SalaKahooChat");
         storage = FirebaseStorage.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
 
         adapter = new HELPERS.AdapterMensajes(this);
@@ -85,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Mensaje msj = new MensajeEnviar(txtMensaje.getText().toString() ,
-                                        nombre.getText().toString(),
+                               nombreUsuarioLogeado,
                                fotoPerfilUri ,
                                  TYPE_MENSAJE ,
                                  ServerValue.TIMESTAMP);
@@ -108,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-               finish();
+                gotoLoginActivityAndFinish();
             }
         });
 
@@ -165,13 +176,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            btnEnviar.setEnabled(false);
+            DatabaseReference reference =  database.getReference("Usuarios/" + currentUser.getUid() );
+            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange( DataSnapshot dataSnapshot) {
+                    for (DataSnapshot usuario : dataSnapshot.getChildren()){
+                        nombreUsuarioLogeado = usuario.getValue(Usuario.class).getNombre();
+                        nombre.setText(nombreUsuarioLogeado);
+                        btnEnviar.setEnabled(true);
+                        Toast.makeText(MainActivity.this , "USUARIO :  " + usuario.getValue(Usuario.class).getNombre(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onCancelled( DatabaseError databaseError) {
+
+                }
+            });
+
+        }else{
+            gotoLoginActivityAndFinish();
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode,Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == SEND_IMAGE_OK && resultCode == RESULT_OK){
             Uri uri = data.getData();
             storageReference  = storage.getReference("ImagesKahooChat");
             final StorageReference fotoReferencia = storageReference.child(uri.getLastPathSegment());
-
             fotoReferencia.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -179,9 +217,9 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             Uri u = uri ;
-                            MensajeEnviar msj = new MensajeEnviar("Imagen Enviada" ,
+                            MensajeEnviar msj = new MensajeEnviar(nombreUsuarioLogeado + " ha enviado una imagen" ,
                                     u.toString(),
-                                    nombre.getText().toString(),
+                                    nombreUsuarioLogeado,
                                     fotoPerfilUri,
                                     TYPE_IMG,
                                     ServerValue.TIMESTAMP);
@@ -204,9 +242,9 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
                             Uri u = uri ;
                             fotoPerfilUri = u.toString();
-                            MensajeEnviar msj = new MensajeEnviar("Foto de perfil Actualizada" ,
+                            MensajeEnviar msj = new MensajeEnviar(nombreUsuarioLogeado + " Ha actualizado su de perfil" ,
                                     u.toString(),
-                                    nombre.getText().toString(),
+                                    nombreUsuarioLogeado,
                                     fotoPerfilUri,
                                     TYPE_IMG,
                                     ServerValue.TIMESTAMP);
@@ -218,5 +256,10 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+    private void gotoLoginActivityAndFinish(){
+        startActivity(new Intent(MainActivity.this, Activity_Login.class));
+        finish();
     }
 }

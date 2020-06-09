@@ -2,6 +2,7 @@ package com.afl.kahootchat.ACTIVITIES;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -36,7 +38,7 @@ public class Activity_Registro extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase database ;
-    private DatabaseReference referenceUsuarios ;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +54,6 @@ public class Activity_Registro extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        referenceUsuarios = database.getReference("Usuarios");
 
         btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +65,14 @@ public class Activity_Registro extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(Activity_Registro.this, "USUARIO " + usuarioRegistro.getText().toString() + " registrado correctamente", Toast.LENGTH_SHORT).show();
-                            referenceUsuarios.push().setValue(new Usuario(usuarioRegistro.getText().toString(),emailRegistro.getText().toString()));
+
+                            Usuario newUser = new Usuario();
+                            newUser.setNombre(usuarioRegistro.getText().toString());
+                            newUser.setEmail(emailRegistro.getText().toString());
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            DatabaseReference reference =  database.getReference("Usuarios/" + currentUser.getUid() );
+
+                            reference.push().setValue(newUser);
                             clearForm();
                             finish();
                         } else {
