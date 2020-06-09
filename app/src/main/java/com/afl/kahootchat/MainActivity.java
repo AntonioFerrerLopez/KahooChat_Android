@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
                             Uri u = uri ;
                             fotoPerfilUri = u.toString();
-                            MensajeEnviar msj = new MensajeEnviar(nombreUsuarioLogeado + " Ha actualizado su de perfil" ,
+                            MensajeEnviar msj = new MensajeEnviar(nombreUsuarioLogeado + " Ha actualizado su foto de perfil" ,
                                     u.toString(),
                                     nombreUsuarioLogeado,
                                     fotoPerfilUri,
