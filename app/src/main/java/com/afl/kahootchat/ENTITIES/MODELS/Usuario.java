@@ -8,11 +8,10 @@ public class Usuario {
     private String nombre;
     private String email;
     private Long birthDate;
+    private String gender;
 
 
-    public Usuario() {
-
-    }
+    public Usuario() { }
 
     public Usuario(String nombre, String email) {
         this.nombre = nombre;
@@ -50,7 +49,11 @@ public class Usuario {
         this.birthDate = birthDate;
     }
 
+    public String getGender() {
+        return gender;
+    }
 
-
-
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 }

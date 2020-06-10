@@ -1,50 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
     android:padding="15sp">
-    <EditText
-        android:id="@+id/idRegistroUsuario"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Usuario (minimo 3 carácteres)"/>
-    <EditText
-        android:id="@+id/idRegistroEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress"/>
-    <EditText
-        android:id="@+id/idRegistroPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña (entre 8 y 16 carácteres)"
-        android:inputType="textPassword"/>
-    <EditText
-        android:id="@+id/idRegistroPasswordRepetir"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Repite la contraseña"
-        android:inputType="textPassword"/>
-    <Button
-        android:id="@+id/btnRegistrar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="REGISTRAR"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="bottom|right"
-        android:paddingTop="50sp">
-            <Button
-                android:id="@+id/btnRegisterToLogin"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="15sp">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="LOGIN"
-                android:gravity="center"/>
-    </LinearLayout>
+                android:text="Click para coambiar la imagen de perfil" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgUser"
+                android:layout_width="150sp"
+                android:layout_height="150sp"
+                android:layout_marginBottom="50sp"
+                android:src="@mipmap/ic_launcher" />
+
+            <EditText
+                android:id="@+id/idRegistroUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Usuario (minimo 3 carácteres)" />
+
+            <EditText
+                android:id="@+id/idRegistroEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/idRegistroPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Contraseña (entre 8 y 16 carácteres)"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/idRegistroPasswordRepetir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Repite la contraseña"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/birthDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:hint="Fecha de Nacimiento"
+                android:inputType="date" />
+
+            <RadioGroup
+                android:id="@+id/rgGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Hombre" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Mujer" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btnRegistrar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="REGISTRAR" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|right"
+                android:orientation="vertical"
+                android:paddingTop="50sp">
+
+                <Button
+                    android:id="@+id/btnRegisterToLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="LOGIN" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
 </LinearLayout>
