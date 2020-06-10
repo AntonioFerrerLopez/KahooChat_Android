@@ -7,15 +7,23 @@ public class Usuario {
     private String fotoPerfilUri;
     private String nombre;
     private String email;
-    private Object createTimestamp;
+    private Long birthDate;
+
 
     public Usuario() {
-        createTimestamp = ServerValue.TIMESTAMP;
+
     }
 
     public Usuario(String nombre, String email) {
         this.nombre = nombre;
         this.email = email;
+    }
+    public String getFotoPerfilUri() {
+        return fotoPerfilUri;
+    }
+
+    public void setFotoPerfilUri(String fotoPerfilUri) {
+        this.fotoPerfilUri = fotoPerfilUri;
     }
 
     public String getNombre() {
@@ -34,17 +42,15 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getFotoPerfilUri() {
-        return fotoPerfilUri;
+    public Long getBirthDate() {
+        return birthDate;
     }
 
-    public void setFotoPerfilUri(String fotoPerfilUri) {
-        this.fotoPerfilUri = fotoPerfilUri;
+    public void setBirthDate(Long birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public Object getCreateTimestamp() {
-        return createTimestamp;
-    }
+
 
 
 }

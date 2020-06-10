@@ -8,13 +8,11 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afl.kahootchat.ENTITIES.DATAMANIPULATIONOBJECTS.MensajeDMO;
-import com.afl.kahootchat.HOLDERS.Mensajeria_Holder;
+import com.afl.kahootchat.ENTITIES.HOLDERS.Mensajeria_Holder;
 import com.afl.kahootchat.R;
 import com.bumptech.glide.Glide;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Mensajeria_Adapter extends RecyclerView.Adapter<Mensajeria_Holder> {

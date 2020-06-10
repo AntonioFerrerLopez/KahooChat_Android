@@ -1,4 +1,4 @@
-package com.afl.kahootchat.HOLDERS;
+package com.afl.kahootchat.ENTITIES.HOLDERS;
 
 import android.view.View;
 import android.widget.ImageView;

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.afl.kahootchat.ENTITIES.DAO.UsuarioDAO;
 import com.afl.kahootchat.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -71,7 +72,6 @@ public class Activity_Login extends AppCompatActivity {
     });
 
 
-
     }
 
     @Override
@@ -85,6 +85,7 @@ public class Activity_Login extends AppCompatActivity {
     }
 
     private void  gotoMainActivity(){
-        startActivity(new Intent(Activity_Login.this , Activity_Mensajeria.class));
+        //startActivity(new Intent(Activity_Login.this , Activity_Mensajeria.class));
+       // finish();
     }
 }

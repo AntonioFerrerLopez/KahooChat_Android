@@ -93,7 +93,7 @@ public class Activity_Mensajeria extends AppCompatActivity {
                 Mensaje msj = new Mensaje();
                 msj.setMensaje(txtMensaje.getText().toString());
                 msj.setContainsPhoto(false);
-                msj.setSenderKey(UsuarioDAO.getUserKey());
+                msj.setSenderKey(UsuarioDAO.getInstance().getUserKey());
                 databaseReference.push().setValue(msj);
                 txtMensaje.setText("");
             }
@@ -219,7 +219,7 @@ public class Activity_Mensajeria extends AppCompatActivity {
                             mesajeToSend.setMensaje(" te ha enviado una foto");
                             mesajeToSend.setFotoUri(uri.toString());
                             mesajeToSend.setContainsPhoto(true);
-                            mesajeToSend.setSenderKey(UsuarioDAO.getUserKey());
+                            mesajeToSend.setSenderKey(UsuarioDAO.getInstance().getUserKey());
                             databaseReference.push().setValue(mesajeToSend);
                         }
                     });

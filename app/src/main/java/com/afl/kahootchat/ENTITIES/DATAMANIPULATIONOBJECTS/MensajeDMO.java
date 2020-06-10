@@ -4,6 +4,7 @@ import com.afl.kahootchat.ENTITIES.MODELS.Mensaje;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class MensajeDMO {
 
@@ -47,7 +48,7 @@ public class MensajeDMO {
 
     public String getMesajeDateCreation(){
         Date date = new Date(getCreatedTimestampLong());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss a");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss a" , Locale.getDefault());
         return simpleDateFormat.format(date);
     }
 }

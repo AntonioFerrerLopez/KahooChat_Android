@@ -1,5 +1,6 @@
 package com.afl.kahootchat.ENTITIES.DATAMANIPULATIONOBJECTS;
 
+import com.afl.kahootchat.ENTITIES.DAO.UsuarioDAO;
 import com.afl.kahootchat.ENTITIES.MODELS.Usuario;
 
 import java.text.SimpleDateFormat;
@@ -32,13 +33,16 @@ public class UsuarioDMO {
         this.usuario = usuario;
     }
 
-    public Long getCreateTimestampReturnLong(){
-        return (Long) usuario.getCreateTimestamp();
-    }
 
     public String getCreationDateFormatted(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy" , Locale.getDefault());
-        Date createdDate = new Date(getCreateTimestampReturnLong());
+        Date createdDate = new Date(UsuarioDAO.getInstance().obtainDateCreationLong());
+        return dateFormat.format(createdDate);
+
+    }    public String getLastSignInLogDate(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy" , Locale.getDefault());
+        Date createdDate = new Date(UsuarioDAO.getInstance().obtainDateLastSignInLong());
         return dateFormat.format(createdDate);
     }
+
 }

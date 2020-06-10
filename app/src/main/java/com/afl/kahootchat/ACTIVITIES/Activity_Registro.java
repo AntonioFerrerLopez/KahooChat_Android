@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.afl.kahootchat.ENTITIES.MODELS.Usuario;
+import com.afl.kahootchat.HELPERS.Constants;
 import com.afl.kahootchat.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -64,14 +65,13 @@ public class Activity_Registro extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(Activity_Registro.this, "USUARIO " + usuarioRegistro.getText().toString() + " registrado correctamente", Toast.LENGTH_SHORT).show();
-
                             Usuario newUser = new Usuario();
                             newUser.setNombre(usuarioRegistro.getText().toString());
                             newUser.setEmail(emailRegistro.getText().toString());
+                            newUser.setFotoPerfilUri(Constants.URI_ANONIMOUS_USER_IMG);
                             FirebaseUser currentUser = mAuth.getCurrentUser();
-                            DatabaseReference reference =  database.getReference("Usuarios/" + currentUser.getUid() );
-
-                            reference.push().setValue(newUser);
+                            DatabaseReference reference =  database.getReference("Usuarios").child(currentUser.getUid());
+                            reference.setValue(newUser);
                             clearForm();
                             finish();
                         } else {
