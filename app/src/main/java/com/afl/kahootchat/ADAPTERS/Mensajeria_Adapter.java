@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afl.kahootchat.ENTITIES.DAO.UsuarioDAO;
 import com.afl.kahootchat.ENTITIES.DATAMANIPULATIONOBJECTS.MensajeDMO;
 import com.afl.kahootchat.ENTITIES.DATAMANIPULATIONOBJECTS.UsuarioDMO;
 import com.afl.kahootchat.ENTITIES.HOLDERS.Mensajeria_Holder;
@@ -41,8 +42,13 @@ public class Mensajeria_Adapter extends RecyclerView.Adapter<Mensajeria_Holder> 
 
     @Override
     public Mensajeria_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(c).inflate(R.layout.card_view_mensajes, parent, false);
-        return new Mensajeria_Holder(v);
+        View cardVievToPrint ;
+        if(viewType == Constants.IS_MY_MESSAJE){
+            cardVievToPrint =  LayoutInflater.from(c).inflate(R.layout.card_view_mensajes_emiter, parent, false);
+        }else{
+            cardVievToPrint =  LayoutInflater.from(c).inflate(R.layout.card_view_mensajes_receiber, parent, false);
+        }
+        return new Mensajeria_Holder(cardVievToPrint);
     }
 
     @Override
@@ -72,5 +78,19 @@ public class Mensajeria_Adapter extends RecyclerView.Adapter<Mensajeria_Holder> 
     @Override
     public int getItemCount() {
         return listMensaje.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(listMensaje.get(position).getUsuarioDMO() != null){
+            if(listMensaje.get(position).getUsuarioDMO().getKey().equals(UsuarioDAO.getInstance().getUserKey())){
+                return Constants.IS_MY_MESSAJE;
+            }else{
+                return Constants.IS_NOT_MY_MESSAJE;
+            }
+        }else{
+            return -1;
+        }
+
     }
 }

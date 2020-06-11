@@ -12,4 +12,6 @@ public class Constants {
     public static final int GALLERY_SELECTED = 0;
     public static final int CAMERA_SELECTED = 1;
     public static final int LIST_STARTS_IN_ZERO = 1 ;
+    public static final int IS_MY_MESSAJE = 210 ;
+    public static final int IS_NOT_MY_MESSAJE = 220;
 }
