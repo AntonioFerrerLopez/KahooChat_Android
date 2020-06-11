@@ -1,5 +1,6 @@
 package com.afl.kahootchat.ACTIVITIES;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +22,10 @@ import com.afl.kahootchat.ENTITIES.MODELS.Usuario;
 import com.afl.kahootchat.ADAPTERS.Mensajeria_Adapter;
 import com.afl.kahootchat.R;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -39,11 +43,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Activity_Mensajeria extends AppCompatActivity {
 
+    private static final String LOBY_NAME = "Sala_KahooChat";
     private final Integer SEND_IMAGE_OK = 1 ;
     private final Integer SEND_FOTO_PERFIL_OK = 2 ;
-
-    private final String TYPE_MENSAJE = "1";
-    private final String TYPE_IMG = "2";
 
     private CircleImageView fotoPerfil;
     private TextView nombre;
@@ -61,23 +63,22 @@ public class Activity_Mensajeria extends AppCompatActivity {
     private FirebaseAuth mAuth ;
     private String nombreUsuarioLogeado;
 
-    private String fotoPerfilUri = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mensajeria);
 
-        fotoPerfil = (CircleImageView) findViewById(R.id.fotoPerfil);
-        nombre = (TextView) findViewById(R.id.nombre);
-        rvMensajes = (RecyclerView) findViewById(R.id.rvMensajes);
-        txtMensaje = (EditText) findViewById(R.id.txtMensaje);
-        btnEnviar = (Button) findViewById(R.id.btnEnviar);
-        btnEnviarFoto = (ImageButton) findViewById(R.id.btnEnviarFoto);
-        btnLogOut = (Button) findViewById(R.id.btnlogOut);
+        fotoPerfil = findViewById(R.id.fotoPerfil);
+        nombre =  findViewById(R.id.nombre);
+        rvMensajes = findViewById(R.id.rvMensajes);
+        txtMensaje =  findViewById(R.id.txtMensaje);
+        btnEnviar =  findViewById(R.id.btnEnviar);
+        btnEnviarFoto =  findViewById(R.id.btnEnviarFoto);
+        btnLogOut =  findViewById(R.id.btnlogOut);
 
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("SalaKahooChat");
+        databaseReference = database.getReference(LOBY_NAME);
         storage = FirebaseStorage.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
@@ -98,11 +99,9 @@ public class Activity_Mensajeria extends AppCompatActivity {
                 txtMensaje.setText("");
             }
 
-
-
-
             }
         });
+
         btnEnviarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,10 +184,10 @@ public class Activity_Mensajeria extends AppCompatActivity {
                 @Override
                 public void onDataChange( DataSnapshot dataSnapshot) {
                     for (DataSnapshot usuario : dataSnapshot.getChildren()){
-                        nombreUsuarioLogeado = usuario.getValue(Usuario.class).getNombre();
-                        nombre.setText(nombreUsuarioLogeado);
+                   //     nombreUsuarioLogeado = usuario.getValue(Usuario.class).getNombre();
+                    //    nombre.setText(nombreUsuarioLogeado);
                         btnEnviar.setEnabled(true);
-                        Toast.makeText(Activity_Mensajeria.this , "USUARIO :  " + usuario.getValue(Usuario.class).getNombre(), Toast.LENGTH_SHORT).show();
+                   //     Toast.makeText(Activity_Mensajeria.this , "USUARIO :  " + usuario.getValue(Usuario.class).getNombre(), Toast.LENGTH_SHORT).show();
                     }
                 }
                 @Override
@@ -209,22 +208,30 @@ public class Activity_Mensajeria extends AppCompatActivity {
             Uri uri = data.getData();
             storageReference  = storage.getReference("ImagesKahooChat");
             final StorageReference fotoReferencia = storageReference.child(uri.getLastPathSegment());
-            fotoReferencia.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            fotoReferencia.putFile(uri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    fotoReferencia.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Mensaje mesajeToSend = new Mensaje();
-                            mesajeToSend.setMensaje(" te ha enviado una foto");
-                            mesajeToSend.setFotoUri(uri.toString());
-                            mesajeToSend.setContainsPhoto(true);
-                            mesajeToSend.setSenderKey(UsuarioDAO.getInstance().getUserKey());
-                            databaseReference.push().setValue(mesajeToSend);
-                        }
-                    });
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    return fotoReferencia.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri uriTask = task.getResult();
+                        Mensaje mesajeToSend = new Mensaje();
+                        mesajeToSend.setMensaje(" te ha enviado una foto");
+                        mesajeToSend.setFotoUri(uriTask.toString());
+                        mesajeToSend.setContainsPhoto(true);
+                        mesajeToSend.setSenderKey(UsuarioDAO.getInstance().getUserKey());
+                        databaseReference.push().setValue(mesajeToSend);
+                    }
                 }
             });
+
+
 
         }/*else if(requestCode  == SEND_FOTO_PERFIL_OK && resultCode == RESULT_OK){
             Uri uri = data.getData();

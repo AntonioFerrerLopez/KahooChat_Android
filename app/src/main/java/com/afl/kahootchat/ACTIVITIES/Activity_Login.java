@@ -85,7 +85,7 @@ public class Activity_Login extends AppCompatActivity {
     }
 
     private void  gotoMainActivity(){
-        //startActivity(new Intent(Activity_Login.this , Activity_Mensajeria.class));
-       // finish();
+     //   startActivity(new Intent(Activity_Login.this , Activity_Mensajeria.class));
+     //   finish();
     }
 }

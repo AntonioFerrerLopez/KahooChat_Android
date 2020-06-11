@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Click para coambiar la imagen de perfil" />
+                android:text="Click para cambiar la imagen de perfil" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgUser"
@@ -64,7 +64,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:hint="Fecha de Nacimiento"
-                android:inputType="date" />
+                android:inputType="date"
+                android:focusableInTouchMode="false"/>
 
             <RadioGroup
                 android:id="@+id/rgGender"
@@ -73,12 +74,15 @@
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/menSelected"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Hombre" />
+                    android:hint="Hombre"
+                    android:checked="true"/>
 
                 <RadioButton
+                    android:id="@+id/womanSelected"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

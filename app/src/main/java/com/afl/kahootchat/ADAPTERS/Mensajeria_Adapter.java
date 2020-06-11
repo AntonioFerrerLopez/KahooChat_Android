@@ -17,8 +17,6 @@ import java.util.List;
 
 public class Mensajeria_Adapter extends RecyclerView.Adapter<Mensajeria_Holder> {
 
-    private static final String TYPE_IMAGE = "2";
-    private static final String TYPE_MENSAJE = "1";
     private List<MensajeDMO> listMensaje = new ArrayList<>();
     private Context c;
 
