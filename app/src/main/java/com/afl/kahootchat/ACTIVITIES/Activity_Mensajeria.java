@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.afl.kahootchat.ENTITIES.DAO.UsuarioDAO;
 import com.afl.kahootchat.ENTITIES.DATAMANIPULATIONOBJECTS.MensajeDMO;
+import com.afl.kahootchat.ENTITIES.DATAMANIPULATIONOBJECTS.UsuarioDMO;
 import com.afl.kahootchat.ENTITIES.MODELS.Mensaje;
 import com.afl.kahootchat.ENTITIES.MODELS.Usuario;
 import com.afl.kahootchat.ADAPTERS.Mensajeria_Adapter;
@@ -38,6 +39,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -139,11 +143,34 @@ public class Activity_Mensajeria extends AppCompatActivity {
         });
 
         databaseReference.addChildEventListener(new ChildEventListener() {
+            Map<String, UsuarioDMO> temporalUsersList = new HashMap<>();
+
+
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Mensaje msjToLoad = dataSnapshot.getValue(Mensaje.class);
-                MensajeDMO mensajeDMO = new  MensajeDMO(dataSnapshot.getKey(),msjToLoad);
-                adapter.addMensaje(mensajeDMO);
+                final Mensaje msjToLoad = dataSnapshot.getValue(Mensaje.class);
+                final MensajeDMO mensajeDMO = new  MensajeDMO(dataSnapshot.getKey(),msjToLoad);
+                final int position = adapter.addMensaje(mensajeDMO);
+
+                if(temporalUsersList.get(msjToLoad.getSenderKey()) != null ){
+                    mensajeDMO.setUsuarioDMO(temporalUsersList.get(msjToLoad.getSenderKey()));
+                    adapter.updateMesage(position,mensajeDMO);
+                }else{
+                    UsuarioDAO.getInstance().obtainInfoOfUserByKey(msjToLoad.getSenderKey(), new UsuarioDAO.UserFromFirebaseSender() {
+                        @Override
+                        public void sendUserFromFirebase(UsuarioDMO usuarioDMO) {
+                            temporalUsersList.put(msjToLoad.getSenderKey(),usuarioDMO);
+                            mensajeDMO.setUsuarioDMO(usuarioDMO);
+                            adapter.updateMesage(position,mensajeDMO);
+                        }
+
+                        @Override
+                        public void errorHasOccurred(String error) {
+                            Toast.makeText(Activity_Mensajeria.this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
             }
 
             @Override

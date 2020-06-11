@@ -11,4 +11,5 @@ public class Constants {
     public static final Object FOTO_PROFILE_DIR = "Profile";
     public static final int GALLERY_SELECTED = 0;
     public static final int CAMERA_SELECTED = 1;
+    public static final int LIST_STARTS_IN_ZERO = 1 ;
 }

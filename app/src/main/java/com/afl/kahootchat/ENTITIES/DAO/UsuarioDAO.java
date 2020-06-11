@@ -7,13 +7,18 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.afl.kahootchat.ENTITIES.DATAMANIPULATIONOBJECTS.UsuarioDMO;
+import com.afl.kahootchat.ENTITIES.MODELS.Usuario;
 import com.afl.kahootchat.HELPERS.Constants;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -25,12 +30,17 @@ import org.threeten.bp.format.DateTimeFormatter;
 public class UsuarioDAO {
 
     public interface PhotoUriSender{
-        public void sendUriPhotoString(String uri);
+        void sendUriPhotoString(String uri);
+    }
+
+    public interface UserFromFirebaseSender{
+        void sendUserFromFirebase(UsuarioDMO usuarioDMO);
+        void errorHasOccurred(String error);
     }
 
     private static UsuarioDAO usuarioDAO = null ;
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+    private DatabaseReference referenceUsers;
     private FirebaseStorage storage;
     private StorageReference referencePhotoProfile;
 
@@ -43,7 +53,7 @@ public class UsuarioDAO {
 
     private UsuarioDAO(){
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference(Constants.USERS_FIREBASE_NODE);
+        referenceUsers = firebaseDatabase.getReference(Constants.USERS_FIREBASE_NODE);
         storage = FirebaseStorage.getInstance();
         referencePhotoProfile = storage.getReference("" + Constants.FOTO_DIR + Constants.SLASH + Constants.FOTO_PROFILE_DIR + Constants.SLASH + getUserKey());
     }
@@ -58,6 +68,22 @@ public class UsuarioDAO {
 
     public Long obtainDateLastSignInLong(){
         return FirebaseAuth.getInstance().getCurrentUser().getMetadata().getLastSignInTimestamp();
+    }
+
+    public void obtainInfoOfUserByKey(final String userKey , final UserFromFirebaseSender userFromFirebaseSender ){
+        referenceUsers.child(userKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Usuario usuario = dataSnapshot.getValue(Usuario.class);
+                UsuarioDMO usuarioDMO = new UsuarioDMO(userKey,usuario);
+                userFromFirebaseSender.sendUserFromFirebase(usuarioDMO);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                userFromFirebaseSender.errorHasOccurred(databaseError.getMessage());
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
