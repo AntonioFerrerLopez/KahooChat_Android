@@ -2,7 +2,10 @@ package com.afl.kahootchat.ENTITIES.DATAMANIPULATIONOBJECTS;
 
 import com.afl.kahootchat.ENTITIES.MODELS.Mensaje;
 
-import java.text.SimpleDateFormat;
+import org.ocpsoft.prettytime.PrettyTime;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -16,7 +19,6 @@ public class MensajeDMO {
         this.msjKey = msjKey;
         this.mensaje = mensaje;
     }
-
 
     public String getMsjKey() {
         return msjKey;
@@ -48,8 +50,8 @@ public class MensajeDMO {
 
     public String getMesajeDateCreation(){
         Date date = new Date(getCreatedTimestampLong());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss a" , Locale.getDefault());
-        return simpleDateFormat.format(date);
+        PrettyTime prettyTime = new PrettyTime(new Date(), Locale.getDefault());
+        return  prettyTime.format(date);
     }
 }
 
